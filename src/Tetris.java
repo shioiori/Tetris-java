@@ -69,12 +69,15 @@ public class Tetris extends JPanel {
 
     public void paint(Graphics g) {
         super.paintComponent(g);
-        paintTetromino(g);
-        //paintWall(g);
+        paintBackground(g);
+        if (!lose) {
+            paintTetromino(g);
+            paintWall(g);
+        }
         paintScore(g);
     }
 
-    public void paintTetromino(Graphics g){
+    public void paintBackground(Graphics g){
         g.drawImage(bgfull, 0,0, 550,830, null);
         g.translate(30,30);
         Color line = new Color(20,52,64);
@@ -92,14 +95,16 @@ public class Tetris extends JPanel {
             g.drawImage(gameover,0,0,max_col * blockSize,max_row * blockSize,null);
             return;
         }
+    }
+
+    public void paintTetromino(Graphics g){
         Cell[] cells = tetromino.getCell();
         for (int i = 0; i < cells.length; ++i){
             Cell c = cells[i];
-            int x = c.getCol() * (blockSize);
-            int y = c.getRow() * (blockSize);
+            int x = c.getCol() * blockSize;
+            int y = c.getRow() * blockSize;
             g.drawImage(c.getImage(), x, y, null);
         }
-        paintWall(g);
    }
 
    private void paintWall(Graphics g){
