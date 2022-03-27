@@ -1,3 +1,4 @@
+package model;
 public class State {
     protected int row0, row1, row2, row3, col0, col1, col2, col3;
     public State(int row0, int col0, int row1, int col1, int row2, int col2, int row3, int col3){

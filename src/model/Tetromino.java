@@ -1,4 +1,7 @@
+package model;
 import java.util.Random;
+
+import controller.Tetris;
 
 public class Tetromino {
 
