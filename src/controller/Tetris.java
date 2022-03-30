@@ -1,11 +1,11 @@
 package controller;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
+import model.AudioPlayer;
 import model.Cell;
 import model.Tetromino;
 import view.HighScore;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -49,6 +49,14 @@ public class Tetris extends JPanel {
             e.printStackTrace();
         }
     }
+    AudioPlayer audioPlayer = null;
+    {
+        try {
+            audioPlayer = new AudioPlayer();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public Tetris(JFrame jFrame, JFrame window){
         this.mainmenu = jFrame;
@@ -61,41 +69,44 @@ public class Tetris extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
-                switch (key) {
-                    case KeyEvent.VK_ENTER:
-                        if (lose) {
-                            newGameStart();
-                            updateHighScore(score);
-                            score = 0;
-                        }
-                    case KeyEvent.VK_UP:
-                        rotateAction();
-                        break;
-                    case KeyEvent.VK_DOWN:
-                        softDropAction();
-                        break;
-                    case KeyEvent.VK_LEFT:
-                        moveLeftAction();
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        moveRightAction();
-                        break;
-                    case KeyEvent.VK_SPACE:
-                        hardDropAction();
-                        break;
-                    case KeyEvent.VK_R:
-                        if (lose){
-                            updateHighScore(score);
-                            score = 0;
-                            mainmenu.setVisible(true);
-                            window.setVisible(false);
-                            window.dispose();
-                        }
-                    case KeyEvent.VK_P:
-                        if (pause){
-                            continueAction();
-                        }
-                        else pauseAction();
+                if (!pause){
+                    switch (key) {
+                        case KeyEvent.VK_ENTER:
+                            if (lose) {
+                                newGameStart();
+                                updateHighScore(score);
+                                score = 0;
+                            }
+                            break;
+                        case KeyEvent.VK_UP:
+                            rotateAction();
+                            break;
+                        case KeyEvent.VK_DOWN:
+                            softDropAction();
+                            break;
+                        case KeyEvent.VK_LEFT:
+                            moveLeftAction();
+                            break;
+                        case KeyEvent.VK_RIGHT:
+                            moveRightAction();
+                            break;
+                        case KeyEvent.VK_SPACE:
+                            hardDropAction();
+                            break;
+                        case KeyEvent.VK_R:
+                            if (lose) {
+                                updateHighScore(score);
+                                score = 0;
+                                mainmenu.setVisible(true);
+                                window.setVisible(false);
+                                window.dispose();
+                            }
+                        case KeyEvent.VK_P:
+                            if (!lose) pauseAction();
+                    }
+                }
+                else {
+                    if (key == KeyEvent.VK_P) continueAction();
                 }
                 if (!lose) repaint();
             }
@@ -103,7 +114,6 @@ public class Tetris extends JPanel {
         this.requestFocus();
         this.addKeyListener(l);
     }
-
 
     public void paint(Graphics g) {
         super.paintComponent(g);
@@ -142,9 +152,13 @@ public class Tetris extends JPanel {
         g.drawLine(0, max_row * blockSize, blockSize * max_col, max_row * blockSize);
         g.drawLine(max_col * blockSize, 0, max_col * blockSize, max_row * blockSize);
         g.drawLine(0, 0, 0, max_row * blockSize);
+        g.setColor(new Color(102,102,102));
+        for (int i = 0; i <= max_row; ++i)
+            g.drawLine(0, i * blockSize, blockSize * max_col, i * blockSize);
+        for (int i = 0; i <= max_col; ++i)
+            g.drawLine(i * blockSize, 0, i * blockSize, blockSize * max_row);
         if (lose) {
             g.drawImage(gameover, 0, 0, max_col * blockSize, max_row * blockSize, null);
-            return;
         }
     }
 
@@ -181,12 +195,12 @@ public class Tetris extends JPanel {
     public void paintScore(Graphics g) {
         g.drawImage(flowerframe, 320, 0, null);
         g.setFont(new Font("#9Slide05 Phobia", Font.BOLD, 40));
-        String str = "Score: " + Integer.toString(score);
+        String str = "Score: " + score;
         g.setColor(new Color(20, 52, 64));
         g.drawString(str, 416 - (str.length() * 8), 122);
 
         g.drawImage(flowerframe, 320, 150, null);
-        String strlv = "Level: " + Integer.toString(level);
+        String strlv = "Level: " + level;
         g.drawString(strlv, 416 - (strlv.length() * 8), 276);
     }
 
@@ -203,6 +217,12 @@ public class Tetris extends JPanel {
     }
 
     public void hardDropAction() {
+        try {
+            audioPlayer.dropVoice();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         while (canDrop()) tetromino.softDrop();
         landToWall();
         destroyLine();
@@ -222,7 +242,7 @@ public class Tetris extends JPanel {
         for (int i = 0; i < cells.length; ++i) {
             int row = cells[i].getRow();
             int col = cells[i].getCol();
-            if (col >= max_col || col - 1 < 0 || (col - 1 >= 0 && wall[row][col - 1] != null)) return;
+            if (col >= max_col || col - 1 < 0 || wall[row][col - 1] != null) return;
         }
         tetromino.moveLeft();
     }
@@ -232,7 +252,7 @@ public class Tetris extends JPanel {
         for (int i = 0; i < cells.length; ++i) {
             int row = cells[i].getRow();
             int col = cells[i].getCol();
-            if (col + 1 >= max_col || col < 0 || (col + 1 < max_col && wall[row][col + 1] != null)) return;
+            if (col + 1 >= max_col || col < 0 || wall[row][col + 1] != null) return;
         }
         tetromino.moveRight();
     }
@@ -240,6 +260,12 @@ public class Tetris extends JPanel {
     public boolean fullCell(int row) {
         for (int i = 0; i < max_col; ++i)
             if (wall[row][i] == null) return false;
+        try {
+            audioPlayer.clearVoice();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -306,29 +332,42 @@ public class Tetris extends JPanel {
     public boolean pause = false;
 
     public void pauseAction() {
-        timer.cancel(); // 停止定时器
+        timer.cancel();
         pause = true;
         repaint();
     }
 
     public void continueAction() {
         timer = new Timer();
-        timer.schedule(new TimerTask() {
-            public void run() {
-                softDropAction();
-                repaint();
-            }
-        }, 700, 700);
         pause = false;
-        repaint();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                int numDrop = level;
+                while (numDrop > 0){
+                    softDropAction();
+                    numDrop--;
+                }
+                repaint();
+                if (lose) {
+                    try {
+                        audioPlayer.gameOverVoice();
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    timer.cancel();
+                }
+            }
+        }, 600, 600);
     }
 
     public void gameOver() {
         for (int i = 0; i < wall[0].length; ++i)
-            if (wall[0][i] != null)
-                if (wall[0][i].getRow() <= 0) {
-                    lose = true;
-                }
+            if (wall[0][i] != null) lose = true;
+//                if (wall[0][i].getRow() <= 0) {
+//                    lose = true;
+//                }
     }
 
     public void clearWall() {
@@ -340,19 +379,10 @@ public class Tetris extends JPanel {
         clearWall();
         lose = false;
         score = 0;
+        pause = false;
         tetromino = Tetromino.randomTetromino();
         nextTetromino = Tetromino.randomTetromino();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                int numDrop = level;
-                while (numDrop > 0){
-                    softDropAction();
-                    numDrop--;
-                }
-                repaint();
-            }
-        }, 600, 600);
+        continueAction();
     }
 
     public void updateHighScore(int value) {
@@ -381,14 +411,14 @@ public class Tetris extends JPanel {
             Arrays.sort(scr);
             myWriter = new FileWriter(HighScore.fileScore);
             for (int i = 4; i >= 0; --i) {
-                myWriter.write(Integer.toString(scr[i]) + "\n");
+                myWriter.write(scr[i] + "\n");
             }
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         } finally {
             try {
-                myWriter.close();
+                if (myWriter != null) myWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
