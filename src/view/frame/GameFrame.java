@@ -1,7 +1,6 @@
 package view.frame;
 
-import constant.GameConstant;
-import controller.Painting;
+import model.Painting;
 import controller.TetrisController;
 import listener.KeyBoardListener;
 import view.panel.GamePanel;
@@ -21,10 +20,11 @@ public class GameFrame extends JFrame{
 
     public GameFrame(){
         this.setTitle("Tetris");
-        this.setSize(GameConstant.WIDTH, GameConstant.HEIGHT);
+        //this.setSize(GameConstant.WIDTH, GameConstant.HEIGHT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.setLocation(650, 100);
+        //this.setResizable(false);
+        //this.setLocation(650, 100);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
 
         tetrisController = TetrisController.getInstance();
@@ -35,5 +35,6 @@ public class GameFrame extends JFrame{
         tetrisController.newGameStart();
         Painting painting = Painting.getInstance();
         painting.setTetrisController(tetrisController);
+        this.pack();
     }
 }

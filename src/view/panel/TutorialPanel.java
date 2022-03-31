@@ -1,20 +1,17 @@
 package view.panel;
 
 import model.GameImage;
-import view.roundBtnBorder;
+import view.button.UndoButton;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TutorialPanel extends JPanel {
-    JButton undo;
+    UndoButton undo;
 
     public TutorialPanel(){
-        undo = new JButton("Undo");
-        undo.setPreferredSize(new Dimension(200, 50));
-        undo.setFont(new Font("Noto Sans", Font.BOLD, 32));
-        undo.setBorder(new roundBtnBorder(25));
-        undo.setFocusable(false);
+        undo = new UndoButton();
+        undo.setPrevious(MainMenuPanel.getInstance());
         this.add(undo);
     }
 

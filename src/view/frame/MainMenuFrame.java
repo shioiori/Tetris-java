@@ -21,8 +21,10 @@ public class MainMenuFrame extends JFrame {
         GameImage.getInstance().setImageMap(LoadData.getInstance().loadData());
         mainMenuPanel = new MainMenuPanel();
         this.add(mainMenuPanel);
-        this.setVisible(true);
         this.setSize(GameConstant.WIDTH, GameConstant.HEIGHT);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 
     public void changePanel(JPanel jPanel){

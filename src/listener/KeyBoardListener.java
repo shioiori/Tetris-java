@@ -1,6 +1,6 @@
 package listener;
 
-import controller.Painting;
+import model.Painting;
 import controller.TetrisController;
 import view.frame.GameFrame;
 import view.frame.MainMenuFrame;

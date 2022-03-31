@@ -7,7 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static view.HighScore.scr;
+import static view.panel.HighScorePanel.scr;
+
 
 public class LoadData {
     public static LoadData instance = null;

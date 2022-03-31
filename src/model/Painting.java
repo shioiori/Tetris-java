@@ -1,8 +1,7 @@
-package controller;
+package model;
 
 import constant.GameConstant;
-import model.Cell;
-import model.GameImage;
+import controller.TetrisController;
 import view.panel.GamePanel;
 
 import java.awt.*;
@@ -42,7 +41,7 @@ public class Painting{
     }
 
     public void paintBackground(Graphics g) {
-        g.drawImage(gameImage.getImage("Tetris Background"), 0, 0, 550, 830, null);
+        g.drawImage(gameImage.getImage("Tetris Background"), 0, 0, GamePanel.getInstance().getGameWidth(), GamePanel.getInstance().getGameHeight(),null);
         g.translate(30, 30);
         Color line = new Color(20, 52, 64);
         g.setColor(line);
@@ -77,7 +76,7 @@ public class Painting{
             Cell c = nextcells[i];
             int x = c.getCol() * GameConstant.BLOCKSIZE;
             int y = c.getRow() * GameConstant.BLOCKSIZE;
-            g.drawImage(c.getImage(), 255+x, 340+y, null);
+            g.drawImage(c.getImage(), GamePanel.getInstance().getGameWidth()- 300 + x, 340+y, null);
         }
     }
 
@@ -96,15 +95,17 @@ public class Painting{
     }
 
     public void paintScore(Graphics g) {
-        g.drawImage(gameImage.getImage("Wooden Bar"), 320, 0, null);
+        int width = GamePanel.getInstance().getGameWidth();
+        int height = 0;
+        g.drawImage(gameImage.getImage("Wooden Bar"), width - 240, 0, null);
         g.setFont(new Font("#9Slide05 Phobia", Font.BOLD, 40));
         String str = "Score: " + tetrisController.getScore();
         g.setColor(new Color(20, 52, 64));
-        g.drawString(str, 416 - (str.length() * 8), 122);
+        g.drawString(str, (width - 140) - (str.length() * 8), 122);
 
-        g.drawImage(gameImage.getImage("Wooden Bar"), 320, 150, null);
+        g.drawImage(gameImage.getImage("Wooden Bar"), width - 240, 150, null);
         String strlv = "Level: " + tetrisController.getLevel();
-        g.drawString(strlv, 416 - (strlv.length() * 8), 276);
+        g.drawString(strlv, (width - 140) - (strlv.length() * 8), 276);
     }
 
 //    public void repaint(){

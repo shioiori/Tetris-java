@@ -2,12 +2,19 @@ package view.panel;
 
 import listener.SwitchSceneListener;
 import model.GameImage;
-import view.roundBtnBorder;
+import view.button.roundBtnBorder;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainMenuPanel extends JPanel {
+    public static MainMenuPanel instance = null;
+
+    public static MainMenuPanel getInstance(){
+        if (instance == null) instance = new MainMenuPanel();
+        return instance;
+    }
+
     private JButton newGameBtn;
     private JButton tutorialBtn;
     private JButton highScoreBtn;

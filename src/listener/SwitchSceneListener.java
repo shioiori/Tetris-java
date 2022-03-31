@@ -2,6 +2,7 @@ package listener;
 
 import view.frame.GameFrame;
 import view.frame.MainMenuFrame;
+import view.panel.HighScorePanel;
 import view.panel.TutorialPanel;
 
 import javax.swing.*;
@@ -39,7 +40,7 @@ public class SwitchSceneListener implements MouseListener {
         String cmd = obj.getText();
         if ("New Game".equals(cmd)){
             GameFrame gameFrame = GameFrame.getInstance();
-            MainMenuFrame.getInstance().setVisible(true);
+            MainMenuFrame.getInstance().setVisible(false);
         }
         if ("Tutorial".equals(cmd)){
             //TutorialFrame tutorial = TutorialFrame.getInstance();
@@ -47,6 +48,7 @@ public class SwitchSceneListener implements MouseListener {
         }
         if ("High Score".equals(cmd)){
            // HighScoreBoard highScoreBoard = new HighScoreBoard();
+            MainMenuFrame.getInstance().changePanel(new HighScorePanel());
         }
         if ("Exit".equals(cmd)){
             System.exit(1);

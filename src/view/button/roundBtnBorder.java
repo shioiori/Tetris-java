@@ -1,4 +1,4 @@
-package view;
+package view.button;
 
 import javax.swing.border.Border;
 import java.awt.*;
