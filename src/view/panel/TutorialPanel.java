@@ -10,11 +10,12 @@ public class TutorialPanel extends JPanel {
     JButton undo;
 
     public TutorialPanel(){
+        undo = new JButton("Undo");
         undo.setPreferredSize(new Dimension(200, 50));
         undo.setFont(new Font("Noto Sans", Font.BOLD, 32));
         undo.setBorder(new roundBtnBorder(25));
         undo.setFocusable(false);
-       // nPanel.add(undo);
+        this.add(undo);
     }
 
     @Override

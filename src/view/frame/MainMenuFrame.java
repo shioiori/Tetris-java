@@ -24,4 +24,11 @@ public class MainMenuFrame extends JFrame {
         this.setVisible(true);
         this.setSize(GameConstant.WIDTH, GameConstant.HEIGHT);
     }
+
+    public void changePanel(JPanel jPanel){
+        this.getContentPane().removeAll();
+        this.getContentPane().add(jPanel);
+        this.revalidate();
+        repaint();
+    }
 }
