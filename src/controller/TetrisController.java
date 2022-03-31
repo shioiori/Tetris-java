@@ -2,6 +2,7 @@ package controller;
 
 import constant.GameConstant;
 import model.*;
+import view.panel.GamePanel;
 
 import java.util.Arrays;
 import java.util.Timer;
@@ -14,11 +15,11 @@ public class TetrisController {
         if (instance == null) instance = new TetrisController();
         return instance;
     }
-
+    GamePanel gamePanel;
     private Cell[][] wall = new Cell[50][50];
     private Tetromino tetromino;
     private Tetromino nextTetromino;
-    private Painting painting;
+//    private Painting painting;
     private AudioPlayer audioPlayer;
     private Timer timer;
     private Tetris tetris;
@@ -28,8 +29,9 @@ public class TetrisController {
         timer = new Timer();
         tetris = Tetris.getInstance();
         tetris.setTetrisController(this);
-        painting = Painting.getInstance();
-        painting.setTetrisController(this);
+        gamePanel = GamePanel.getInstance();
+        //painting = Painting.getInstance();
+        //painting.setTetrisController(this);
     }
 
 
@@ -225,7 +227,7 @@ public class TetrisController {
     public void pauseAction(){
         timer.cancel();
         tetris.setPause(true);
-        painting.repaint();
+        //painting.epaint();
     }
 
     public void continueAction(){
@@ -239,7 +241,8 @@ public class TetrisController {
                     softDropAction();
                     numDrop--;
                 }
-                painting.repaint();
+                //painting.repaint();
+                gamePanel.repaint();
                 if (isLose()) {
                     try {
                         audioPlayer.gameOverVoice();

@@ -1,7 +1,9 @@
 package view.frame;
+
 import constant.GameConstant;
 import controller.Painting;
 import controller.TetrisController;
+import listener.KeyBoardListener;
 import view.panel.GamePanel;
 
 import javax.swing.*;
@@ -28,9 +30,10 @@ public class GameFrame extends JFrame{
         tetrisController = TetrisController.getInstance();
         gamePanel = GamePanel.getInstance();
         this.add(gamePanel);
+        KeyBoardListener keyBoardListener = new KeyBoardListener();
+        this.addKeyListener(keyBoardListener);
         tetrisController.newGameStart();
-        Painting painting = new Painting();
-        painting.setGamePanel(gamePanel);
-        painting.paint();
+        Painting painting = Painting.getInstance();
+        painting.setTetrisController(tetrisController);
     }
 }

@@ -1,6 +1,7 @@
 package listener;
 
 import view.frame.GameFrame;
+import view.frame.MainMenuFrame;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -37,6 +38,8 @@ public class SwitchSceneListener implements MouseListener {
         String cmd = obj.getText();
         if ("New Game".equals(cmd)){
             GameFrame gameFrame = GameFrame.getInstance();
+            MainMenuFrame.getInstance().setVisible(false);
+
         }
         if ("Tutorial".equals(cmd)){
             //Tutorial tutorial = new Tutorial();

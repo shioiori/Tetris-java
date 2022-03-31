@@ -17,7 +17,6 @@ public class Painting{
 
     TetrisController tetrisController;
     GameImage gameImage;
-    GamePanel gamePanel;
 
     public Painting(){
         gameImage = GameImage.getInstance();
@@ -26,34 +25,30 @@ public class Painting{
     public Painting(GamePanel gamePanel){
         tetrisController = TetrisController.getInstance();
         gameImage = GameImage.getInstance();
-        this.gamePanel = gamePanel;
     }
 
     public void setTetrisController(TetrisController tetrisController) {
         this.tetrisController = tetrisController;
     }
 
-    public void paint() {
-        Graphics g = gamePanel.getGraphics();
-        paintBackground();
-        paintBoard();
+    public void paint(Graphics g) {
+        paintBackground(g);
+        paintBoard(g);
         if (!tetrisController.isLose()) {
-            paintTetromino();
-            paintWall();
+            paintTetromino(g);
+            paintWall(g);
         }
-        paintScore();
+        paintScore(g);
     }
 
-    public void paintBackground() {
-        Graphics g = gamePanel.getGraphics();
+    public void paintBackground(Graphics g) {
         g.drawImage(gameImage.getImage("Tetris Background"), 0, 0, 550, 830, null);
         g.translate(30, 30);
         Color line = new Color(20, 52, 64);
         g.setColor(line);
     }
 
-    public void paintBoard() {
-        Graphics g = gamePanel.getGraphics();
+    public void paintBoard(Graphics g) {
         g.drawImage(gameImage.getImage("Transparent Board"), 0, 0, GameConstant.MAX_COL * GameConstant.BLOCKSIZE, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE, null);
         g.drawLine(0, 0, GameConstant.BLOCKSIZE * GameConstant.MAX_COL, 0);
         g.drawLine(0, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE, GameConstant.BLOCKSIZE * GameConstant.MAX_COL, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE);
@@ -69,8 +64,7 @@ public class Painting{
         }
     }
 
-    public void paintTetromino() {
-        Graphics g = gamePanel.getGraphics();
+    public void paintTetromino(Graphics g) {
         Cell[] cells = tetrisController.getTetromino().getCell();
         for (int i = 0; i < cells.length; ++i) {
             Cell c = cells[i];
@@ -87,8 +81,7 @@ public class Painting{
         }
     }
 
-    private void paintWall() {
-        Graphics g = gamePanel.getGraphics();
+    private void paintWall(Graphics g) {
         Cell[][] wall = tetrisController.getWall();
         for (int i = 0; i < wall.length; ++i) {
             Cell[] line = wall[i];
@@ -102,8 +95,7 @@ public class Painting{
         }
     }
 
-    public void paintScore() {
-        Graphics g = gamePanel.getGraphics();
+    public void paintScore(Graphics g) {
         g.drawImage(gameImage.getImage("Wooden Bar"), 320, 0, null);
         g.setFont(new Font("#9Slide05 Phobia", Font.BOLD, 40));
         String str = "Score: " + tetrisController.getScore();
@@ -115,12 +107,8 @@ public class Painting{
         g.drawString(strlv, 416 - (strlv.length() * 8), 276);
     }
 
-    public void setGamePanel(GamePanel gamePanel){
-        this.gamePanel = gamePanel;
-    }
-
-    public void repaint(){
-        gamePanel.repaint();
-    }
+//    public void repaint(){
+//        repaint();
+//    }
 
 }

@@ -1,8 +1,10 @@
 package listener;
 
+import controller.Painting;
 import controller.TetrisController;
 import view.frame.GameFrame;
 import view.frame.MainMenuFrame;
+import view.panel.GamePanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,6 +18,7 @@ public class KeyBoardListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         TetrisController tetrisController = TetrisController.getInstance();
+        Painting painting = Painting.getInstance();
         int key = e.getKeyCode();
         if (!tetrisController.isPause()){
             switch (key) {
@@ -55,8 +58,8 @@ public class KeyBoardListener implements KeyListener {
         else {
             if (key == KeyEvent.VK_P) tetrisController.continueAction();
         }
-        //if (!tetrisController.isLose()) repaint();
-        // không chắc lắm về tác dụng
+        if (!tetrisController.isLose()) GamePanel.getInstance().repaint();
+        // rất chắc chắn về tác dụng
     }
 
     @Override
