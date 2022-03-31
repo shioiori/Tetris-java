@@ -26,7 +26,7 @@ public class GameFrame extends JFrame{
         this.setVisible(true);
 
         tetrisController = TetrisController.getInstance();
-        gamePanel = new GamePanel();
+        gamePanel = GamePanel.getInstance();
         this.add(gamePanel);
         tetrisController.newGameStart();
         Painting painting = new Painting();

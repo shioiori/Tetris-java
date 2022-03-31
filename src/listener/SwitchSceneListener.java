@@ -36,7 +36,7 @@ public class SwitchSceneListener implements MouseListener {
         JButton obj = (JButton) e.getSource();
         String cmd = obj.getText();
         if ("New Game".equals(cmd)){
-            GameFrame gameFrame = new GameFrame();
+            GameFrame gameFrame = GameFrame.getInstance();
         }
         if ("Tutorial".equals(cmd)){
             //Tutorial tutorial = new Tutorial();

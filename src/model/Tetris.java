@@ -19,7 +19,11 @@ public class Tetris {
     private boolean pause = false;
     private boolean lose = false;
     private Timer timer;
-    private TetrisController tetrisController = TetrisController.getInstance();
+    private TetrisController tetrisController;
+
+    public void setTetrisController(TetrisController tetrisController) {
+        this.tetrisController = tetrisController;
+    }
 
     public int getScore() {
         return score;

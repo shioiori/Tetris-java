@@ -27,6 +27,9 @@ public class TetrisController {
         audioPlayer = new AudioPlayer();
         timer = new Timer();
         tetris = Tetris.getInstance();
+        tetris.setTetrisController(this);
+        painting = Painting.getInstance();
+        painting.setTetrisController(this);
     }
 
 

@@ -20,7 +20,6 @@ public class Painting{
     GamePanel gamePanel;
 
     public Painting(){
-        tetrisController = TetrisController.getInstance();
         gameImage = GameImage.getInstance();
     }
 
@@ -28,6 +27,10 @@ public class Painting{
         tetrisController = TetrisController.getInstance();
         gameImage = GameImage.getInstance();
         this.gamePanel = gamePanel;
+    }
+
+    public void setTetrisController(TetrisController tetrisController) {
+        this.tetrisController = tetrisController;
     }
 
     public void paint() {
