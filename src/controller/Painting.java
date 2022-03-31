@@ -1,83 +1,123 @@
 package controller;
 
+import constant.GameConstant;
 import model.Cell;
+import model.GameImage;
+import view.panel.GamePanel;
 
 import java.awt.*;
 
 public class Painting{
-    public void paint(Graphics g) {
-        super.paintComponent(g);
-        paintBackground(g);
-        paintBoard(g);
-        if (!lose) {
-            paintTetromino(g);
-            paintWall(g);
-        }
-        paintScore(g);
+    public static Painting instance = null;
+
+    public static Painting getInstance(){
+        if (instance == null) instance = new Painting();
+        return instance;
     }
 
-    public void paintBackground(Graphics g) {
-        g.drawImage(bgfull, 0, 0, 550, 830, null);
+    TetrisController tetrisController;
+    GameImage gameImage;
+    GamePanel gamePanel;
+
+    public Painting(){
+        tetrisController = TetrisController.getInstance();
+        gameImage = GameImage.getInstance();
+    }
+
+    public Painting(GamePanel gamePanel){
+        tetrisController = TetrisController.getInstance();
+        gameImage = GameImage.getInstance();
+        this.gamePanel = gamePanel;
+    }
+
+    public void paint() {
+        Graphics g = gamePanel.getGraphics();
+        paintBackground();
+        paintBoard();
+        if (!tetrisController.isLose()) {
+            paintTetromino();
+            paintWall();
+        }
+        paintScore();
+    }
+
+    public void paintBackground() {
+        Graphics g = gamePanel.getGraphics();
+        g.drawImage(gameImage.getImage("Tetris Background"), 0, 0, 550, 830, null);
         g.translate(30, 30);
         Color line = new Color(20, 52, 64);
         g.setColor(line);
     }
 
-    public void paintBoard(Graphics g) {
-        g.drawImage(bgmini, 0, 0, max_col * blockSize, max_row * blockSize, null);
-        g.drawLine(0, 0, blockSize * max_col, 0);
-        g.drawLine(0, max_row * blockSize, blockSize * max_col, max_row * blockSize);
-        g.drawLine(max_col * blockSize, 0, max_col * blockSize, max_row * blockSize);
-        g.drawLine(0, 0, 0, max_row * blockSize);
+    public void paintBoard() {
+        Graphics g = gamePanel.getGraphics();
+        g.drawImage(gameImage.getImage("Transparent Board"), 0, 0, GameConstant.MAX_COL * GameConstant.BLOCKSIZE, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE, null);
+        g.drawLine(0, 0, GameConstant.BLOCKSIZE * GameConstant.MAX_COL, 0);
+        g.drawLine(0, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE, GameConstant.BLOCKSIZE * GameConstant.MAX_COL, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE);
+        g.drawLine(GameConstant.MAX_COL * GameConstant.BLOCKSIZE, 0, GameConstant.MAX_COL * GameConstant.BLOCKSIZE, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE);
+        g.drawLine(0, 0, 0, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE);
         g.setColor(new Color(102,102,102));
-        for (int i = 0; i <= max_row; ++i)
-            g.drawLine(0, i * blockSize, blockSize * max_col, i * blockSize);
-        for (int i = 0; i <= max_col; ++i)
-            g.drawLine(i * blockSize, 0, i * blockSize, blockSize * max_row);
-        if (lose) {
-            g.drawImage(gameover, 0, 0, max_col * blockSize, max_row * blockSize, null);
+        for (int i = 0; i <= GameConstant.MAX_ROW; ++i)
+            g.drawLine(0, i * GameConstant.BLOCKSIZE, GameConstant.BLOCKSIZE * GameConstant.MAX_COL, i * GameConstant.BLOCKSIZE);
+        for (int i = 0; i <= GameConstant.MAX_COL; ++i)
+            g.drawLine(i * GameConstant.BLOCKSIZE, 0, i * GameConstant.BLOCKSIZE, GameConstant.BLOCKSIZE * GameConstant.MAX_ROW);
+        if (tetrisController.isLose()) {
+            g.drawImage(gameImage.getImage("Game Over"), 0, 0, GameConstant.MAX_COL * GameConstant.BLOCKSIZE, GameConstant.MAX_ROW * GameConstant.BLOCKSIZE, null);
         }
     }
 
-    public void paintTetromino(Graphics g) {
-        Cell[] cells = tetromino.getCell();
+    public void paintTetromino() {
+        Graphics g = gamePanel.getGraphics();
+        Cell[] cells = tetrisController.getTetromino().getCell();
         for (int i = 0; i < cells.length; ++i) {
             Cell c = cells[i];
-            int x = c.getCol() * blockSize;
-            int y = c.getRow() * blockSize;
+            int x = c.getCol() * GameConstant.BLOCKSIZE;
+            int y = c.getRow() * GameConstant.BLOCKSIZE;
             g.drawImage(c.getImage(), x, y, null);
         }
-        Cell[] nextcells = nextTetromino.getCell();
+        Cell[] nextcells = tetrisController.getNextTetromino().getCell();
         for (int i = 0; i < nextcells.length; ++i) {
             Cell c = nextcells[i];
-            int x = c.getCol() * blockSize;
-            int y = c.getRow() * blockSize;
+            int x = c.getCol() * GameConstant.BLOCKSIZE;
+            int y = c.getRow() * GameConstant.BLOCKSIZE;
             g.drawImage(c.getImage(), 255+x, 340+y, null);
         }
     }
 
-    private void paintWall(Graphics g) {
+    private void paintWall() {
+        Graphics g = gamePanel.getGraphics();
+        Cell[][] wall = tetrisController.getWall();
         for (int i = 0; i < wall.length; ++i) {
             Cell[] line = wall[i];
             for (int j = 0; j < line.length; ++j) {
                 Cell cell = line[j];
-                int x = j * blockSize;
-                int y = i * blockSize;
+                int x = j * GameConstant.BLOCKSIZE;
+                int y = i * GameConstant.BLOCKSIZE;
                 if (cell != null)
                     g.drawImage(cell.getImage(), x - 1, y - 1, null);
             }
         }
     }
 
-    public void paintScore(Graphics g) {
-        g.drawImage(flowerframe, 320, 0, null);
+    public void paintScore() {
+        Graphics g = gamePanel.getGraphics();
+        g.drawImage(gameImage.getImage("Wooden Bar"), 320, 0, null);
         g.setFont(new Font("#9Slide05 Phobia", Font.BOLD, 40));
-        String str = "Score: " + score;
+        String str = "Score: " + tetrisController.getScore();
         g.setColor(new Color(20, 52, 64));
         g.drawString(str, 416 - (str.length() * 8), 122);
 
-        g.drawImage(flowerframe, 320, 150, null);
-        String strlv = "Level: " + level;
+        g.drawImage(gameImage.getImage("Wooden Bar"), 320, 150, null);
+        String strlv = "Level: " + tetrisController.getLevel();
         g.drawString(strlv, 416 - (strlv.length() * 8), 276);
     }
+
+    public void setGamePanel(GamePanel gamePanel){
+        this.gamePanel = gamePanel;
+    }
+
+    public void repaint(){
+        gamePanel.repaint();
+    }
+
 }

@@ -1,9 +1,9 @@
 package view;
 
-import controller.Tetris;
+
+import model.GameImage;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -26,13 +26,13 @@ public class HighScoreBoard {
         JButton undo = new JButton("RETURN");
         undo.setPreferredSize(new Dimension(200, 50));
         undo.setFont(new Font("Noto Sans", Font.BOLD, 32));
-        undo.setBorder(new RoundBtn(25));
+        undo.setBorder(new roundBtnBorder(25));
         undo.setFocusable(false);
         JPanel flowPanel = new JPanel(){
         	 @Override
              protected void paintComponent(Graphics g) {
                  super.paintComponent(g);
-                 g.drawImage(Tetris.bgpanel, 0, 0, null);
+                 g.drawImage(GameImage.getInstance().getImage("Mainmenu Background"), 0, 0, null);
              }
         };        
         flowPanel.add(undo);

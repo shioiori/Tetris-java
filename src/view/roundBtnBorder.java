@@ -1,16 +1,13 @@
 package view;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
-
 import javax.swing.border.Border;
+import java.awt.*;
 
-public class RoundBtn implements Border 
+public class roundBtnBorder implements Border
 {
     private int r;
     
-    RoundBtn(int r) {
+    public roundBtnBorder(int r) {
         this.r = r;
     }
    

@@ -1,17 +1,14 @@
-package view;
+package listener;
 
-import controller.Tetris;
+import view.frame.GameFrame;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class SwitchScene implements MouseListener {
+public class SwitchSceneListener implements MouseListener {
 
-    JFrame myFrame;
-
-    SwitchScene(JFrame jFrame){
-        myFrame = jFrame;
+    public SwitchSceneListener(){
     }
 
     @Override
@@ -39,21 +36,16 @@ public class SwitchScene implements MouseListener {
         JButton obj = (JButton) e.getSource();
         String cmd = obj.getText();
         if ("New Game".equals(cmd)){
-            Window window = new Window(myFrame);
-            myFrame.setVisible(false);
+            GameFrame gameFrame = new GameFrame();
         }
         if ("Tutorial".equals(cmd)){
-            Tutorial tutorial = new Tutorial(myFrame);
-            myFrame.setVisible(false);
+            //Tutorial tutorial = new Tutorial();
         }
         if ("High Score".equals(cmd)){
-            HighScoreBoard highScoreBoard = new HighScoreBoard(myFrame);
-            myFrame.setVisible(false);
+           // HighScoreBoard highScoreBoard = new HighScoreBoard();
         }
         if ("Exit".equals(cmd)){
-            //Tutorial tutorial = new Tutorial();
             System.exit(1);
-            myFrame.setVisible(false);
         }
     }
 }
